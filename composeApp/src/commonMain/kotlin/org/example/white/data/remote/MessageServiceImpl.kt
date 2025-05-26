@@ -1,7 +1,7 @@
-package com.mouemen.azkary.data.remote
+package org.example.white.data.remote
 
-import com.mouemen.azkary.data.remote.dto.MessageDto
-import com.mouemen.azkary.domain.model.Message
+import org.example.white.data.remote.dto.MessageDto
+import org.example.white.domain.model.Message
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

@@ -1,8 +1,9 @@
-package com.mouemen.azkary.data.remote
+package org.example.white.data.remote
 
-import com.mouemen.azkary.domain.model.Message
-import com.mouemen.azkary.util.Resource
+import org.example.white.domain.model.Message
+import org.example.white.util.Resource
 import kotlinx.coroutines.flow.Flow
+import org.example.white.Constants
 
 interface ChatSocketService {
 
@@ -15,7 +16,7 @@ interface ChatSocketService {
     suspend fun closeConnection()
 
     companion object {
-        const val BASE_URL = "ws://192.168.1.111:8080"
+        const val BASE_URL = "ws://${Constants.BASE_URL}:8080"
     }
 
     sealed class EndPoints(val url:String){

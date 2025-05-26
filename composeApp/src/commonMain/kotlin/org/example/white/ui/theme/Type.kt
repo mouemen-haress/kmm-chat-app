@@ -1,34 +1,39 @@
-package com.mouemen.azkary.ui.theme
+package org.example.white.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import whitelabel.composeapp.generated.resources.NotoNaskhArabic_Regular
+import whitelabel.composeapp.generated.resources.Res
+import whitelabel.composeapp.generated.resources.bebas_nue_regular
 
-// Set of Material typography styles to start with
-val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+
+@Composable
+fun AppTypography(): Typography {
+//    val NotoFont = FontFamily(
+//        Font(Res.font.NotoNaskhArabic_Regular, FontWeight.Bold),
+//    )
+
+
+    return Typography(
+        headlineLarge = TextStyle(
+            fontFamily = FontFamily.Serif,
+            fontWeight = FontWeight.Bold,
+            fontSize = 24.sp
+        ),
+        bodyMedium = TextStyle(
+            fontFamily = FontFamily.Serif,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp
+        ),
+        displaySmall = TextStyle(
+            fontFamily = FontFamily.Serif,
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp
+        )
     )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
-)
+}

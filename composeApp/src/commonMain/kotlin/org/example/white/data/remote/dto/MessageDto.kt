@@ -1,6 +1,6 @@
-package com.mouemen.azkary.data.remote.dto
+package org.example.white.data.remote.dto
 
-import com.mouemen.azkary.domain.model.Message
+import org.example.white.domain.model.Message
 import kotlinx.serialization.Serializable
 import org.example.white.util.DateHelper
 

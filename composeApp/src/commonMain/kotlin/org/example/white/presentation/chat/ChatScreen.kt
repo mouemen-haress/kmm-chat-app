@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import cafe.adriel.voyager.core.screen.Screen
-import com.mouemen.azkary.presentation.chat.ChatViewModel
+import org.example.white.presentation.chat.ChatViewModel
 import kotlinx.coroutines.flow.collectLatest
 import cafe.adriel.voyager.koin.koinScreenModel
 import org.example.white.ToastDurationType

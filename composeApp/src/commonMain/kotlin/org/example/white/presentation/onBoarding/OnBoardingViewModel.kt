@@ -1,4 +1,4 @@
-package com.mouemen.azkary.presentation.ussername
+package org.example.white.presentation.onBoarding
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class UsernameViewModel : ScreenModel {
+class OnBoardingViewModel : ScreenModel {
 
     private val _usernameText = mutableStateOf("")
     val usernameText: State<String> = _usernameText

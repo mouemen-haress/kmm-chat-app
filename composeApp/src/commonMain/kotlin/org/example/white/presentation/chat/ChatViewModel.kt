@@ -1,12 +1,12 @@
-package com.mouemen.azkary.presentation.chat
+package org.example.white.presentation.chat
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.mouemen.azkary.data.remote.ChatSocketService
-import com.mouemen.azkary.data.remote.MessageService
-import com.mouemen.azkary.util.Resource
+import org.example.white.data.remote.ChatSocketService
+import org.example.white.data.remote.MessageService
+import org.example.white.util.Resource
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn

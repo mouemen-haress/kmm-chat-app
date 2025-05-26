@@ -1,6 +1,6 @@
-package com.mouemen.azkary.presentation.chat
+package org.example.white.presentation.chat
 
-import com.mouemen.azkary.domain.model.Message
+import org.example.white.domain.model.Message
 
 
 data class ChatState(

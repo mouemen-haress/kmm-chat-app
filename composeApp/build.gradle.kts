@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.androidLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -28,6 +29,7 @@ kotlin {
             isStatic = true
         }
     }
+
 
     sourceSets {
 
@@ -77,6 +79,14 @@ kotlin {
 }
 
 android {
+    buildFeatures {
+        compose = true
+    }
+
+    // ✅ NEW: enable KMP Android resources
+    @Suppress("UnstableApiUsage")
+    experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
+
     namespace = "org.example.white"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
