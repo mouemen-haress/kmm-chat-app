@@ -39,6 +39,7 @@ kotlin {
             implementation(libs.ktor.client.android)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.ktor.client.cio)
+            implementation(libs.androidx.core.splashscreen)
 
         }
         commonMain.dependencies {
@@ -56,6 +57,11 @@ kotlin {
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.koin)
             implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.napier)
+
+
             implementation(libs.mongodb.realm)
             implementation(libs.kotlin.coroutines)
             implementation(libs.stately.common)
@@ -63,6 +69,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
 
             implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.content.logging)
             implementation(libs.ktor.serialization.kotlinx.json)
 
             implementation(compose.materialIconsExtended)

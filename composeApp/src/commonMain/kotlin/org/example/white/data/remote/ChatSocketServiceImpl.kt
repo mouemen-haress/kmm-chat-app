@@ -1,5 +1,6 @@
 package org.example.white.data.remote
 
+import cafe.adriel.voyager.core.model.screenModelScope
 import org.example.white.data.remote.dto.MessageDto
 import org.example.white.domain.model.Message
 import org.example.white.util.Resource
@@ -18,9 +19,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.isActive
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.decodeFromString
+import org.example.white.domain.use_cases.ConnectToSocketUseCase
 
 class ChatSocketServiceImpl(
-    private val client: HttpClient
+    private val client: HttpClient,
 ) : ChatSocketService {
 
     private var socket: WebSocketSession? = null

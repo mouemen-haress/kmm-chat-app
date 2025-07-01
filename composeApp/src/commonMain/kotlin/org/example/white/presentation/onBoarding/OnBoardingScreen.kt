@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Preview
 import androidx.compose.material.icons.filled.Visibility
@@ -22,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,20 +32,35 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.example.white.presentation.ParentScreen
+import org.example.white.presentation.`common-components`.Popup
 
-class OnBoardingScreen() : Screen {
+class OnBoardingScreen() : ParentScreen() {
     @Composable
     override fun Content() {
         var viewModel = koinScreenModel<OnBoardingViewModel>()
         val navigator = LocalNavigator.current
 
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
+        var dialogText by remember { mutableStateOf<String?>(null) }
+        var email by remember { mutableStateOf("abuMuslem") }
+        var password by remember { mutableStateOf("123456") }
         var showPassword by remember { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            viewModel.uiEvent.collect {
+                when (it) {
+                    is OnBoardingUiEvent.Error -> {
+                        dialogText = it.errorText
+                    }
+
+                    OnBoardingUiEvent.Success -> {
+                        navigator?.push(ChatListScreen())
+                    }
+                }
+            }
+        }
 
         Box(
             modifier = Modifier
@@ -95,7 +110,7 @@ class OnBoardingScreen() : Screen {
 
                 Button(
                     onClick = {
-                        viewModel.onJoinClick()
+                        viewModel.login(email, password)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -110,6 +125,12 @@ class OnBoardingScreen() : Screen {
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
+            }
+
+            if (dialogText != null) {
+                Popup(dialogText) {
+                    dialogText = null
+                }
             }
         }
     }

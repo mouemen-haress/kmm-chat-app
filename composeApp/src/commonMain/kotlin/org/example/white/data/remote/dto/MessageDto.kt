@@ -6,18 +6,27 @@ import org.example.white.util.DateHelper
 
 @Serializable
 data class MessageDto(
+    val chatId: String,
+    val senderId: String,
     val text: String,
-    val timestamp: Long,
-    val username: String,
+    val type: MessageType = MessageType.TEXT,
+    val createdAt: Long,
     val id: String
 ) {
     fun toMessage(): Message {
 
         return Message(
             text = text,
-            formatedTime = DateHelper.getCurrentFormattedTime(),
-            username = username
+//            createdAt = DateHelper.getCurrentFormattedTime(),
+            createdAt = 12333,
+            senderId = senderId
         )
     }
 
+}
+
+@Serializable
+enum class MessageType {
+    TEXT,
+    MEDIA
 }

@@ -23,6 +23,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -36,17 +38,23 @@ import org.example.white.presentation.chat.ChatViewModel
 import kotlinx.coroutines.flow.collectLatest
 import cafe.adriel.voyager.koin.koinScreenModel
 import org.example.white.ToastDurationType
+import org.example.white.domain.repositories.PreferencesRepository
 import org.example.white.showToastMsg
+import org.example.white.util.Constants
+import org.koin.mp.KoinPlatform.getKoin
 
 class ChatScreen(
-    var username: String,
+    val chatId: String
 ) : Screen {
 
     @Composable
     override fun Content() {
         var viewModel = koinScreenModel<ChatViewModel>()
+        var preferencesRepository: PreferencesRepository = getKoin().get()
+        var username = ""
 
         LaunchedEffect(key1 = true) {
+            username = preferencesRepository.getValue(Constants.MY_LOGGED_IN_ID) ?: ""
             viewModel.toastEvent.collectLatest { message ->
                 showToastMsg("This is Toast Message", ToastDurationType.LONG)
             }
@@ -56,7 +64,7 @@ class ChatScreen(
         DisposableEffect(key1 = lifecycleOwner) {
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_START) {
-                    viewModel.connectToChat(username)
+                    viewModel.connectToChat(chatId)
                 } else if (event == Lifecycle.Event.ON_STOP) {
                     viewModel.disconnect()
                 }
@@ -82,7 +90,7 @@ class ChatScreen(
                     Spacer(modifier = Modifier.height(32.dp))
                 }
                 items(state.messages) { message ->
-                    val isOwnMessage = message.username == username
+                    val isOwnMessage = message.id == username
                     Box(
                         contentAlignment = if (isOwnMessage) {
                             Alignment.CenterEnd
@@ -124,16 +132,16 @@ class ChatScreen(
                                 .padding(8.dp)
                         ) {
                             Text(
-                                text = message.username,
+                                text = message.id ?: "",
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White
                             )
                             Text(
-                                text = message.text,
+                                text = message.text?:"",
                                 color = Color.White
                             )
                             Text(
-                                text = message.formatedTime,
+                                text = message.createdAt.toString(),
                                 color = Color.White,
                                 modifier = Modifier.align(Alignment.End)
                             )
@@ -153,7 +161,7 @@ class ChatScreen(
                     },
                     modifier = Modifier.weight(1f)
                 )
-                IconButton(onClick = viewModel::sendMessage) {
+                IconButton(onClick = { viewModel.sendMessage(chatId) }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.Send,
                         contentDescription = "Send"
