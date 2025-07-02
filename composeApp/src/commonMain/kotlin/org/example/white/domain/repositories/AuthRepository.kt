@@ -1,6 +1,6 @@
 package org.example.white.domain.repositories
 
-import org.example.white.domain.model.LoginResponse
+import org.example.white.data.remote.dto.LoginResponse
 
 interface AuthRepository {
 

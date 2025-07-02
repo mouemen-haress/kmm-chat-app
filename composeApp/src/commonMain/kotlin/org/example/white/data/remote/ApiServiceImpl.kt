@@ -1,6 +1,5 @@
 package org.example.white.data.remote
 
-import com.russhwolf.settings.Settings
 import org.example.white.data.remote.dto.MessageDto
 import org.example.white.domain.model.Message
 import io.ktor.client.HttpClient
@@ -12,11 +11,11 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
-import org.example.white.Constants
-import org.example.white.domain.model.Chat
-import org.example.white.domain.model.LoginRequest
-import org.example.white.domain.model.LoginResponse
+import org.example.white.data.remote.dto.ChatsDto
+import org.example.white.data.remote.dto.LoginRequest
+import org.example.white.data.remote.dto.LoginResponse
 import org.example.white.domain.repositories.PreferencesRepository
+import org.example.white.util.Constants
 
 data class ApiServiceImpl(
     private val client: HttpClient,
@@ -25,9 +24,10 @@ data class ApiServiceImpl(
 
     override suspend fun getAllMessages(chatId: String): List<Message> {
         return try {
+            val username = preferencesRepository.getValue(Constants.MY_LOGGED_IN_ID) ?: ""
             client.get("${ApiService.EndPoints.GetAllMessages.url}?chatId=$chatId")
                 .body<List<MessageDto>>()
-                .map { it.toMessage() }
+                .map { it.toMessage(username == it.senderId) }
 
         } catch (e: Exception) {
             println(e.message)
@@ -35,17 +35,17 @@ data class ApiServiceImpl(
         }
     }
 
-    override suspend fun getUserChats(): ArrayList<Chat> {
+    override suspend fun getUserChats(): ArrayList<ChatsDto> {
         return try {
             val requestUrl = "${ApiService.EndPoints.GetMyChats.url}?userId=${
                 preferencesRepository.getValue(
                     org.example.white.util.Constants.MY_LOGGED_IN_ID
                 )
             }"
-            client.get(requestUrl).body<ArrayList<Chat>>()
+            client.get(requestUrl).body<ArrayList<ChatsDto>>()
         } catch (e: Exception) {
             println(e.message)
-            arrayListOf<Chat>()
+            arrayListOf<ChatsDto>()
         }
     }
 

@@ -73,6 +73,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
 
             implementation(compose.materialIconsExtended)
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
         }
         commonTest.dependencies {

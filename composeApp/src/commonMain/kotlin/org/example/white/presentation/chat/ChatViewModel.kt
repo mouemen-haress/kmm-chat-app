@@ -4,20 +4,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import org.example.white.data.remote.ChatSocketService
 import org.example.white.data.remote.ApiService
-import org.example.white.util.Resource
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.example.white.data.remote.dto.MessageDto
 import org.example.white.domain.model.Message
-import org.example.white.domain.model.MessageType
 import org.example.white.domain.repositories.PreferencesRepository
 import org.example.white.util.Constants
+import org.example.white.util.DateHelper
 
 class ChatViewModel(
     private val apiService: ApiService,
@@ -70,21 +73,24 @@ class ChatViewModel(
     }
 
     fun sendMessage(chatId: String) {
-        screenModelScope.launch {
+        screenModelScope.launch(Dispatchers.IO) {
             val username = preferencesRepository.getValue(Constants.MY_LOGGED_IN_ID)
             if (!username.isNullOrEmpty()) {
                 if (messageText.value.isNotBlank()) {
 
                     chatSocketService.sendMessage(
                         Json.encodeToString(
-                            Message(
+                            MessageDto(
                                 chatId = chatId,
                                 senderId = username,
                                 text = messageText.value,
-                                createdAt = 111
+                                createdAt = DateHelper.getCurrentTime()
                             )
                         )
                     )
+                    withContext(Dispatchers.Main){
+                        onMessageChange("")
+                    }
                 }
             }
         }

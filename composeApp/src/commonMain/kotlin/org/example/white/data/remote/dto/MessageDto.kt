@@ -8,18 +8,20 @@ import org.example.white.util.DateHelper
 data class MessageDto(
     val chatId: String,
     val senderId: String,
+    val senderName: String? = null,
     val text: String,
     val type: MessageType = MessageType.TEXT,
     val createdAt: Long,
-    val id: String
+    val id: String? = null
 ) {
-    fun toMessage(): Message {
-
+    fun toMessage(isItMyMessage: Boolean): Message {
         return Message(
             text = text,
-//            createdAt = DateHelper.getCurrentFormattedTime(),
-            createdAt = 12333,
-            senderId = senderId
+            createdAt = DateHelper.formatTimestamp(createdAt),
+            senderName = senderName,
+            isItMyMessage = isItMyMessage,
+            senderId = senderId,
+            id = id
         )
     }
 

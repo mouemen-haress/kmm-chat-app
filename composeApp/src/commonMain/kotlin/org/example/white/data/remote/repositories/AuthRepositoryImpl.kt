@@ -1,7 +1,7 @@
 package org.example.white.data.remote.repositories
 
 import org.example.white.data.remote.ApiService
-import org.example.white.domain.model.LoginResponse
+import org.example.white.data.remote.dto.LoginResponse
 import org.example.white.domain.repositories.AuthRepository
 
 class AuthRepositoryImpl(

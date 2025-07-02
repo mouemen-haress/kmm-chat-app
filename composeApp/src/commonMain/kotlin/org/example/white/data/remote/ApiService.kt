@@ -2,13 +2,13 @@ package org.example.white.data.remote
 
 
 import org.example.white.Constants
-import org.example.white.domain.model.Chat
-import org.example.white.domain.model.LoginResponse
+import org.example.white.data.remote.dto.ChatsDto
+import org.example.white.data.remote.dto.LoginResponse
 import org.example.white.domain.model.Message
 
 interface ApiService {
     suspend fun getAllMessages(chatId: String): List<Message>
-    suspend fun getUserChats(): ArrayList<Chat>
+    suspend fun getUserChats(): ArrayList<ChatsDto>
     suspend fun login(displayName: String, password: String): LoginResponse
 
     companion object {

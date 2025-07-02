@@ -33,6 +33,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import kotlinx.datetime.Clock
+import org.example.white.presentation.onBoarding.OnBoardingScreen
+import org.example.white.util.DateHelper
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import whitelabel.composeapp.generated.resources.Res
@@ -46,6 +50,10 @@ class Halaqat() : Screen {
     @Composable
     override fun Content() {
         var selectedLanguage by remember { mutableStateOf("ar") }
+        var secretClickCount by remember { mutableStateOf(0) }
+        var lastClickTime by remember { mutableStateOf(0L) }
+        val navigator = LocalNavigator.current
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -70,7 +78,20 @@ class Halaqat() : Screen {
                 Image(
                     painter = painterResource(Res.drawable.halaqat_logo), // Replace with your logo resource
                     contentDescription = "App Logo",
-                    modifier = Modifier.size(200.dp),
+                    modifier = Modifier.size(200.dp).clickable{
+                        val currentTime = Clock.System.now().epochSeconds
+                        if (currentTime - lastClickTime < 200) {
+                            secretClickCount++
+                        } else {
+                            secretClickCount = 1
+                        }
+                        lastClickTime = currentTime
+
+                        if (secretClickCount >= 5) {
+                            secretClickCount = 0
+                            navigator?.push(OnBoardingScreen())
+                        }
+                    },
                     contentScale = ContentScale.Fit
                 )
 

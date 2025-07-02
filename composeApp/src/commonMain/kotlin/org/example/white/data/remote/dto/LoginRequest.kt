@@ -1,4 +1,4 @@
-package org.example.white.domain.model
+package org.example.white.data.remote.dto
 
 import kotlinx.serialization.Serializable
 

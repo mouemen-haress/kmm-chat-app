@@ -14,7 +14,7 @@ import org.example.white.domain.repositories.AuthRepository
 import org.example.white.domain.repositories.ChatRepository
 import org.example.white.domain.repositories.PreferencesRepository
 import org.example.white.domain.use_cases.ConnectToSocketUseCase
-import org.example.white.presentation.`chat-list`.ChatListViewModel
+import org.example.white.presentation.chat_list.ChatListViewModel
 import org.example.white.presentation.onBoarding.OnBoardingViewModel
 import org.example.white.provideHttpClient
 import org.koin.core.context.startKoin
@@ -33,7 +33,7 @@ val appModule = module {
         Settings()
     }
 
-    single<ChatSocketService> { ChatSocketServiceImpl(get()) }
+    single<ChatSocketService> { ChatSocketServiceImpl(get(),get()) }
 
     single<PreferencesRepository> { PreferencesRepositoryImpl(get()) }
 

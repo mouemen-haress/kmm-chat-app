@@ -23,6 +23,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,6 +40,7 @@ import kotlinx.coroutines.flow.collectLatest
 import cafe.adriel.voyager.koin.koinScreenModel
 import org.example.white.ToastDurationType
 import org.example.white.domain.repositories.PreferencesRepository
+import org.example.white.presentation.common.MessageItem
 import org.example.white.showToastMsg
 import org.example.white.util.Constants
 import org.koin.mp.KoinPlatform.getKoin
@@ -49,12 +51,10 @@ class ChatScreen(
 
     @Composable
     override fun Content() {
-        var viewModel = koinScreenModel<ChatViewModel>()
-        var preferencesRepository: PreferencesRepository = getKoin().get()
-        var username = ""
+        val viewModel = koinScreenModel<ChatViewModel>()
+        val selectedMessageIds = remember { mutableStateListOf<String>() }
 
         LaunchedEffect(key1 = true) {
-            username = preferencesRepository.getValue(Constants.MY_LOGGED_IN_ID) ?: ""
             viewModel.toastEvent.collectLatest { message ->
                 showToastMsg("This is Toast Message", ToastDurationType.LONG)
             }
@@ -90,64 +90,23 @@ class ChatScreen(
                     Spacer(modifier = Modifier.height(32.dp))
                 }
                 items(state.messages) { message ->
-                    val isOwnMessage = message.id == username
-                    Box(
-                        contentAlignment = if (isOwnMessage) {
-                            Alignment.CenterEnd
-                        } else Alignment.CenterStart,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .width(200.dp)
-                                .drawBehind {
-                                    val cornerRadius = 10.dp.toPx()
-                                    val triangleHeight = 20.dp.toPx()
-                                    val triangleWidth = 25.dp.toPx()
-                                    val trianglePath = Path().apply {
-                                        if (isOwnMessage) {
-                                            moveTo(size.width, size.height - cornerRadius)
-                                            lineTo(size.width, size.height + triangleHeight)
-                                            lineTo(
-                                                size.width - triangleWidth,
-                                                size.height - cornerRadius
-                                            )
-                                            close()
-                                        } else {
-                                            moveTo(0f, size.height - cornerRadius)
-                                            lineTo(0f, size.height + triangleHeight)
-                                            lineTo(triangleWidth, size.height - cornerRadius)
-                                            close()
-                                        }
-                                    }
-                                    drawPath(
-                                        path = trianglePath,
-                                        color = if (isOwnMessage) Color.Green else Color.DarkGray
-                                    )
-                                }
-                                .background(
-                                    color = if (isOwnMessage) Color.Green else Color.DarkGray,
-                                    shape = RoundedCornerShape(10.dp)
-                                )
-                                .padding(8.dp)
-                        ) {
-                            Text(
-                                text = message.id ?: "",
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
-                            Text(
-                                text = message.text?:"",
-                                color = Color.White
-                            )
-                            Text(
-                                text = message.createdAt.toString(),
-                                color = Color.White,
-                                modifier = Modifier.align(Alignment.End)
-                            )
+                    val isOwnMessage = message.isItMyMessage
+                    val isSelected = selectedMessageIds.contains(message.id)
+
+                    MessageItem(
+                        isOwnMessage,
+                        message.senderName,
+                        message.text,
+                        message.createdAt.toString(),
+                        onToggleSelect = {
+                            if (isSelected) selectedMessageIds.remove(message.id)
+                            else message.id?.let {
+                                selectedMessageIds.add(it)
+                                println()
+                            }
                         }
-                    }
-                    Spacer(modifier = Modifier.height(32.dp))
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
             Row(
